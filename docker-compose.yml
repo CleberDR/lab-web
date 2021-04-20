@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+    api:
+        build:
+            "./api"
+        command: npm run start
+        container_name: api
+        restart: always
+        ports:
+            - "3000:3000"
+        # depends_on: 
+        #     - db
+          
