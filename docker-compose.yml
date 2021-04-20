@@ -1,6 +1,18 @@
 version: "3.7"
 
 services:
+    db:
+        image: mysql:8.0.24
+        container_name: db
+        restart: always
+        command: --default-authentication-plugin=mysql_native_password
+        environment:
+            MYSQL_DATABASE: 'lab_web_db'
+            MYSQL_ROOT_PASSWORD: 'root'
+        ports: 
+            - "3306:3306"
+        expose: 
+            - "3306"
     api:
         build:
             "./api"
@@ -9,6 +21,10 @@ services:
         restart: always
         ports:
             - "3000:3000"
-        # depends_on: 
-        #     - db
+        depends_on: 
+            - db
+volumes:
+    db:
+
+            
           
