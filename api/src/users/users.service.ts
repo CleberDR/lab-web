@@ -9,18 +9,18 @@ export class UsersService {
   }
 
   findAll() {
-    return `This action returns all users`;
+    return [`findAll`]
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return `findOne ${id}`
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return `update ${id}`
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return `remove ${id}`
   }
 }
