@@ -1,0 +1,191 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model aceite_termo_usuario {
+  id_aceite_termo_usuario Int                @id @default(autoincrement())
+  id_avaliacao            Int?
+  id_usuario              Int?
+  uuid                    String?            @db.Text
+  data_criacao            DateTime?          @db.Timestamp(0)
+  eh_anonimo              Boolean?
+  avaliacao               avaliacao?         @relation(fields: [id_avaliacao], references: [id_avaliacao])
+  usuario                 usuario?           @relation(fields: [id_usuario], references: [id_usuario])
+  resposta_usuario        resposta_usuario[]
+
+  @@index([id_avaliacao], name: "id_avaliacao")
+  @@index([id_usuario], name: "id_usuario")
+}
+
+model autenticacao {
+  id_autenticacao Int      @id @default(autoincrement())
+  id_usuario      Int?
+  senha           String?  @db.Text
+  usuario         usuario? @relation(fields: [id_usuario], references: [id_usuario])
+
+  @@index([id_usuario], name: "id_usuario")
+}
+
+model avaliacao {
+  id_avaliacao            Int                       @id @default(autoincrement())
+  id_semestre             Int?
+  titulo                  String?                   @db.Text
+  objetivo                String?                   @db.Text
+  dataInicio              DateTime?                 @db.Timestamp(0)
+  dataFim                 DateTime?                 @db.Timestamp(0)
+  eh_anonimo              Boolean?
+  status                  Boolean?
+  url                     String?                   @db.Text
+  semestre                semestre?                 @relation(fields: [id_semestre], references: [id_semestre])
+  aceite_termo_usuario    aceite_termo_usuario[]
+  avaliacao_questao_grupo avaliacao_questao_grupo[]
+
+  @@index([id_semestre], name: "id_semestre")
+}
+
+model avaliacao_questao_grupo {
+  id_avaliacao_questao_grupo Int            @id @default(autoincrement())
+  id_avaliacao               Int?
+  id_questao_grupo           Int?
+  posicao                    Int?
+  avaliacao                  avaliacao?     @relation(fields: [id_avaliacao], references: [id_avaliacao])
+  questao_grupo              questao_grupo? @relation(fields: [id_questao_grupo], references: [id_questao_grupo])
+  questao                    questao[]
+
+  @@index([id_avaliacao], name: "id_avaliacao")
+  @@index([id_questao_grupo], name: "id_questao_grupo")
+}
+
+model classe {
+  id_classe               Int                       @id @default(autoincrement())
+  id_disciplina           Int?
+  id_semestre             Int?
+  titulo                  String?                   @db.Text
+  disciplina              disciplina?               @relation(fields: [id_disciplina], references: [id_disciplina])
+  semestre                semestre?                 @relation(fields: [id_semestre], references: [id_semestre])
+  estudante_classe        estudante_classe[]
+  professor_classe        professor_classe[]
+  resposta_usuario_classe resposta_usuario_classe[]
+
+  @@index([id_disciplina], name: "id_disciplina")
+  @@index([id_semestre], name: "id_semestre")
+}
+
+model curso {
+  id_curso   Int          @id @default(autoincrement())
+  codigo     String?      @db.Text
+  titulo     String?      @db.Text
+  disciplina disciplina[]
+}
+
+model disciplina {
+  id_disciplina Int      @id @default(autoincrement())
+  id_curso      Int?
+  codigo        String?  @db.Text
+  titulo        String?  @db.Text
+  curso         curso?   @relation(fields: [id_curso], references: [id_curso])
+  classe        classe[]
+
+  @@index([id_curso], name: "id_curso")
+}
+
+model estudante_classe {
+  id_estudante_classe Int      @id @default(autoincrement())
+  id_usuario          Int?
+  id_classe           Int?
+  classe              classe?  @relation(fields: [id_classe], references: [id_classe])
+  usuario             usuario? @relation(fields: [id_usuario], references: [id_usuario])
+
+  @@index([id_classe], name: "id_classe")
+  @@index([id_usuario], name: "id_usuario")
+}
+
+model professor {
+  id_professor     Int                @id @default(autoincrement())
+  id_usuario       Int?
+  usuario          usuario?           @relation(fields: [id_usuario], references: [id_usuario])
+  professor_classe professor_classe[]
+
+  @@index([id_usuario], name: "id_usuario")
+}
+
+model professor_classe {
+  id_professor_classe Int        @id @default(autoincrement())
+  id_professor        Int?
+  id_classe           Int?
+  classe              classe?    @relation(fields: [id_classe], references: [id_classe])
+  professor           professor? @relation(fields: [id_professor], references: [id_professor])
+
+  @@index([id_classe], name: "id_classe")
+  @@index([id_professor], name: "id_professor")
+}
+
+model questao {
+  id_questao                 Int                      @id @default(autoincrement())
+  id_avaliacao_questao_grupo Int?
+  pergunta                   String?                  @db.Text
+  eh_obrigatoria             Boolean?
+  posicao                    Int?
+  link_imagem                String?                  @db.Text
+  avaliacao_questao_grupo    avaliacao_questao_grupo? @relation(fields: [id_avaliacao_questao_grupo], references: [id_avaliacao_questao_grupo])
+  resposta_usuario           resposta_usuario[]
+
+  @@index([id_avaliacao_questao_grupo], name: "id_avaliacao_questao_grupo")
+}
+
+model questao_grupo {
+  id_questao_grupo        Int                       @id @default(autoincrement())
+  titulo                  String?                   @db.Text
+  eh_atrelado_disciplina  Boolean?
+  avaliacao_questao_grupo avaliacao_questao_grupo[]
+}
+
+model resposta_usuario {
+  id_resposta_usuario     Int                       @id @default(autoincrement())
+  id_questao              Int?
+  id_aceite_termo_usuario Int?
+  resposta                Int?
+  aceite_termo_usuario    aceite_termo_usuario?     @relation(fields: [id_aceite_termo_usuario], references: [id_aceite_termo_usuario])
+  questao                 questao?                  @relation(fields: [id_questao], references: [id_questao])
+  resposta_usuario_classe resposta_usuario_classe[]
+
+  @@index([id_aceite_termo_usuario], name: "id_aceite_termo_usuario")
+  @@index([id_questao], name: "id_questao")
+}
+
+model resposta_usuario_classe {
+  id_resposta_usuario_classe Int               @id @default(autoincrement())
+  id_classe                  Int?
+  id_resposta_usuario        Int?
+  resposta                   Int?
+  classe                     classe?           @relation(fields: [id_classe], references: [id_classe])
+  resposta_usuario           resposta_usuario? @relation(fields: [id_resposta_usuario], references: [id_resposta_usuario])
+
+  @@index([id_classe], name: "id_classe")
+  @@index([id_resposta_usuario], name: "id_resposta_usuario")
+}
+
+model semestre {
+  id_semestre Int         @id @default(autoincrement())
+  nome        String?     @db.Text
+  data_inicio DateTime?   @db.Timestamp(0)
+  data_fim    DateTime?   @db.Timestamp(0)
+  avaliacao   avaliacao[]
+  classe      classe[]
+}
+
+model usuario {
+  id_usuario           Int                    @id @default(autoincrement())
+  cpf                  String?                @db.VarChar(11)
+  matricula            String?                @db.Text
+  tipo_usuario         Int?
+  aceite_termo_usuario aceite_termo_usuario[]
+  autenticacao         autenticacao[]
+  estudante_classe     estudante_classe[]
+  professor            professor[]
+}
