@@ -7,23 +7,20 @@ import {
   Delete, 
   Param, 
   Query, 
-  UsePipes,
-  ValidationPipe, 
+  UsePipes, 
   ParseIntPipe 
 } from '@nestjs/common';
 import { 
   CreateUserDTO, 
-  UpdateUserDTO, 
-  ListAllEntities 
+  UpdateUserDTO,  
 } from './dto';
+import { ListAllEntities } from '../global.dto';
 import { UserService } from './user.service'
 
 @Controller('users')
 export class UserController {
   
     constructor(private readonly userService: UserService) {}
-
-    @UsePipes(new ParseIntPipe())
 
     @Post('/')
     async create(
@@ -33,6 +30,7 @@ export class UserController {
     }
 
     @Get(':id')
+    @UsePipes(new ParseIntPipe())
     async findOne(@Param('id', ParseIntPipe) id: number) {
       return await this.userService.findOne({id: id});
     }
@@ -50,6 +48,7 @@ export class UserController {
     }
   
     @Patch(':id')
+    @UsePipes(new ParseIntPipe())
     async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserData: UpdateUserDTO) {
       return await this.userService.update({
         where: {id: id},
@@ -58,6 +57,7 @@ export class UserController {
     }
   
     @Delete(':id')
+    @UsePipes(new ParseIntPipe())
     async remove(@Param('id', ParseIntPipe) id: number) {
       return await this.userService.delete(
         {id: id}

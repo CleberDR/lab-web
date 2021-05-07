@@ -1,23 +1,37 @@
+import { 
+    IsNotEmpty,
+    IsNumber,
+    IsString
+} from 'class-validator';
+
 export class CreateUserDTO {
-    id: number
+    @IsNotEmpty()
+    @IsString()
     cpf: string
+
+    @IsNotEmpty()
+    @IsString()
     matricula: string
+
+    @IsNotEmpty()
+    @IsNumber()
     tipo: number
+
+    @IsNotEmpty()
+    @IsString()
     nome: string
 }
 
 export class UpdateUserDTO {
-    id: number
+    @IsString()
     cpf: string
-    matricula: string
-    tipo: number
-    nome: string
-}
 
-export class ListAllEntities {
-    where?: string
-    skip?: number
-    take?: number
-    cursor?: number
-    orderBy?: string
+    @IsString()
+    matricula: string
+
+    @IsNumber()
+    tipo: number
+
+    @IsString()
+    nome: string
 }
