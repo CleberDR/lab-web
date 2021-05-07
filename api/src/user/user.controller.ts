@@ -1,5 +1,21 @@
-import { Body, Controller, Get, Post, Patch, Delete, Param, Query, UsePipes, ValidationPipe } from '@nestjs/common';
-import { CreateUserDTO, UpdateUserDTO, ListAllEntities } from './dto';
+import { 
+  Body, 
+  Controller, 
+  Get, 
+  Post, 
+  Patch, 
+  Delete, 
+  Param, 
+  Query, 
+  UsePipes,
+  ValidationPipe, 
+  ParseIntPipe 
+} from '@nestjs/common';
+import { 
+  CreateUserDTO, 
+  UpdateUserDTO, 
+  ListAllEntities 
+} from './dto';
 import { UserService } from './user.service'
 
 @Controller('users')
@@ -7,8 +23,9 @@ export class UserController {
   
     constructor(private readonly userService: UserService) {}
 
+    @UsePipes(new ParseIntPipe())
+
     @Post('/')
-    @UsePipes(new ValidationPipe())
     async create(
       @Body() userData: CreateUserDTO,
     ): Promise<CreateUserDTO> {
@@ -16,13 +33,11 @@ export class UserController {
     }
 
     @Get(':id')
-    @UsePipes(new ValidationPipe())
-    async findOne(@Param('id') id: string) {
-      return await this.userService.findOne({id: +id});
+    async findOne(@Param('id', ParseIntPipe) id: number) {
+      return await this.userService.findOne({id: id});
     }
   
     @Get()
-    @UsePipes(new ValidationPipe())
     async findAll(@Query() query: ListAllEntities) {
       const queryParams = {
         where: (query?.where && JSON.parse(query?.where)) || {},
@@ -35,20 +50,17 @@ export class UserController {
     }
   
     @Patch(':id')
-    @UsePipes(new ValidationPipe())
-    async update(@Param('id') id: string, @Body() updateUserData: UpdateUserDTO) {
-      console.log(updateUserData)
+    async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserData: UpdateUserDTO) {
       return await this.userService.update({
-        where: {id: +id},
+        where: {id: id},
         data: updateUserData
       });
     }
   
     @Delete(':id')
-    @UsePipes(new ValidationPipe())
-    async remove(@Param('id') id: string) {
+    async remove(@Param('id', ParseIntPipe) id: number) {
       return await this.userService.delete(
-        {id: +id}
+        {id: id}
       );
     }
   

@@ -1,7 +1,3 @@
-import {
-    Prisma
-  } from '@prisma/client';
-
 export class CreateUserDTO {
     id: number
     cpf: string
