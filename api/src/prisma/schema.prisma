@@ -13,6 +13,7 @@ model User {
   cpf                  String?                @db.VarChar(11)
   matricula            String?                @db.Text
   tipo                 Int?
+  //email                String?                @db.Text
   // aceite_termo_usuario aceite_termo_usuario[]
   // autenticacao         autenticacao[]
   // estudante_classe     estudante_classe[]

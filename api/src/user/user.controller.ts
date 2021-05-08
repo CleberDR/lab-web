@@ -30,9 +30,8 @@ export class UserController {
     }
 
     @Get(':id')
-    @UsePipes(new ParseIntPipe())
-    async findOne(@Param('id', ParseIntPipe) id: number) {
-      return await this.userService.findOne({id: id});
+    async findOne(@Param('id') id: string) {
+      return await this.userService.findOne({id: +id});
     }
   
     @Get()
@@ -43,24 +42,23 @@ export class UserController {
         take: +query?.take || undefined,
         cursor: +query?.cursor && { id: +query?.cursor } || undefined,
         orderBy: (query?.orderBy && JSON.parse(query?.orderBy)) || {},
-      }
+      }  
       return await this.userService.findAll(queryParams);
     }
   
     @Patch(':id')
-    @UsePipes(new ParseIntPipe())
-    async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserData: UpdateUserDTO) {
+    async update(@Param('id') id: string, @Body() updateUserData: UpdateUserDTO) {
+      console.log(id);
       return await this.userService.update({
-        where: {id: id},
+        where: {id: +id},
         data: updateUserData
       });
     }
   
     @Delete(':id')
-    @UsePipes(new ParseIntPipe())
-    async remove(@Param('id', ParseIntPipe) id: number) {
+    async remove(@Param('id') id: string) {
       return await this.userService.delete(
-        {id: id}
+        {id: +id}
       );
     }
   
