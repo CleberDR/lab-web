@@ -8,7 +8,7 @@ import {
   Param, 
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiCreatedResponse, ApiQuery } from '@nestjs/swagger';
 import { 
   CreateUserDTO, 
   UpdateUserDTO,  
@@ -45,11 +45,46 @@ export class UserController {
     @ApiCreatedResponse({
       type: [CreateUserDTO],
     })
+    @ApiQuery({
+      description: 'Filtra',
+      name: 'where',
+      example: '{"key":"value"}',
+      required: false,
+      type: String,
+    })
+    @ApiQuery({
+      description: 'Pula X registros',
+      name: 'skip',
+      example: '1',
+      required: false,
+      type: Number,
+    })
+    @ApiQuery({
+      description: 'Retorna X registros',
+      name: 'take',
+      example: '2',
+      required: false,
+      type: Number,
+    })
+    @ApiQuery({
+      description: 'Retorna a partir do ID X',
+      name: 'cursor',
+      example: '3',
+      required: false,
+      type: Number,
+    })
+    @ApiQuery({
+      description: 'Ordena',
+      name: 'orderBy',
+      example: '{"key":"asc|desc"}',
+      required: false,
+      type: String,
+    })
     async findAll(@Query() query: ListAllEntities) {
       const queryParams = {
         where: (query?.where && JSON.parse(query?.where)) || {},
-        skip: query?.skip || undefined,
-        take: query?.take || undefined,
+        skip: +query?.skip || undefined,
+        take: +query?.take || undefined,
         cursor: query?.cursor && { id: +query?.cursor } || undefined,
         orderBy: (query?.orderBy && JSON.parse(query?.orderBy)) || {},
       }  

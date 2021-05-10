@@ -42,11 +42,14 @@ export class CreateUserDTO {
     @IsString()
     nome: string
 
-    // @ApiProperty()
+    // @ApiProperty({
+    //     type: String,
+    //     example: 'uneb@uneb.gov.ba'
+    // })
     // @IsNotEmpty()
     // @IsString()
     // @IsEmail()
-    // email: string
+    // email
 }
 
 export class UpdateUserDTO {
@@ -82,4 +85,13 @@ export class UpdateUserDTO {
     @IsOptional()
     @IsString()
     nome
+
+    // @ApiProperty({
+    //     type: String,
+    //     example: 'uneb@uneb.gov.ba'
+    // })
+    // @IsNotEmpty()
+    // @IsString()
+    // @IsEmail()
+    // email
 }
