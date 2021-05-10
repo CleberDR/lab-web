@@ -1,31 +1,24 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder, SwaggerDocumentOptions } from '@nestjs/swagger';
+import { UserModule } from './user/user.module';
 import { ValidationPipe } from '@nestjs/common';
 import { config } from 'dotenv';
 declare const module: any;
 
 config();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3001;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe);
 
   const config = new DocumentBuilder()
-  .setBasePath('')
   .setTitle('LabWeb API')
   .setDescription('LabWeb Class API')
   .setVersion('1.0')
-  .addTag('')
   .build();
-  const options: SwaggerDocumentOptions =  {
-    operationIdFactory: (
-      controllerKey: string,
-      methodKey: string
-    ) => methodKey
-  };
-  const document = SwaggerModule.createDocument(app, config, options);
+  const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
   await app.listen(PORT);

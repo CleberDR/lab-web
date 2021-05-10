@@ -8,6 +8,7 @@ import {
   Param, 
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { 
   CreateUserDTO, 
   UpdateUserDTO,  
@@ -15,6 +16,7 @@ import {
 import { ListAllEntities } from '../global.dto';
 import { UserService } from './user.service'
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
   
