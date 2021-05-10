@@ -15,7 +15,7 @@ export class CreateUserDTO {
     })
     @IsNotEmpty()
     @IsString()
-    @Length(11)
+    @Length(11, 11)
     cpf
 
     @ApiProperty({
