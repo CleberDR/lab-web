@@ -56,7 +56,7 @@ export class UpdateUserDTO {
     })
     @IsOptional()
     @IsString()
-    @Length(11)
+    @Length(11, 11)
     cpf
 
     @ApiProperty({
