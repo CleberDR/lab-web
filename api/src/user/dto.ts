@@ -1,5 +1,4 @@
 import { 
-
     IsOptional,
     IsEmail,
     IsNotEmpty,
@@ -7,25 +6,43 @@ import {
     IsString,
     Length
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDTO {
+    @ApiProperty({
+        type: String,
+        example: '00000000000'
+    })
     @IsNotEmpty()
     @IsString()
     @Length(11)
-    cpf: string
+    cpf
 
+    @ApiProperty({
+        type: String,
+        example: '000000000'
+    })
     @IsNotEmpty()
     @IsString()
-    matricula: string
+    matricula
 
+    @ApiProperty({
+        type: Number,
+        example: 1
+    })
     @IsNotEmpty()
     @IsNumber()
-    tipo: number
+    tipo
 
+    @ApiProperty({
+        type: String,
+        example: 'Uneb Uneb'
+    })
     @IsNotEmpty()
     @IsString()
     nome: string
 
+    // @ApiProperty()
     // @IsNotEmpty()
     // @IsString()
     // @IsEmail()
@@ -33,20 +50,36 @@ export class CreateUserDTO {
 }
 
 export class UpdateUserDTO {
+    @ApiProperty({
+        type: String,
+        example: '00000000000'
+    })
     @IsOptional()
     @IsString()
     @Length(11)
-    cpf: string
+    cpf
 
+    @ApiProperty({
+        type: String,
+        example: '000000000'
+    })
     @IsOptional()
     @IsString()
-    matricula: string
+    matricula
 
+    @ApiProperty({
+        type: Number,
+        example: 1
+    })
     @IsOptional()
     @IsNumber()
-    tipo: number
+    tipo
 
+    @ApiProperty({
+        type: String,
+        example: 'Uneb Uneb'
+    })
     @IsOptional()
     @IsString()
-    nome: string
+    nome
 }
