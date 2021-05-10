@@ -8,7 +8,7 @@ import {
   Param, 
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiCreatedResponse, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiCreatedResponse, ApiQuery, ApiOkResponse } from '@nestjs/swagger';
 import { 
   CreateUserDTO, 
   UpdateUserDTO,  
@@ -38,7 +38,7 @@ export class UserController {
     }
 
     @Get(':id')
-    @ApiCreatedResponse({
+    @ApiOkResponse({
       type: CreateUserDTO,
     })
     async findOne(@Param('id') id: string) {
@@ -50,7 +50,7 @@ export class UserController {
     }
   
     @Get()
-    @ApiCreatedResponse({
+    @ApiOkResponse({
       type: [CreateUserDTO],
     })
     @ApiQuery({
@@ -104,10 +104,11 @@ export class UserController {
     }
   
     @Patch(':id')
-    @ApiCreatedResponse({
+    @ApiOkResponse({
       description: 'Usuário editado com sucesso',
       type: CreateUserDTO,
     })
+    @ApiOkResponse()
     async update(@Param('id') id: string, @Body() updateUserData: UpdateUserDTO) {
       try {
         return await this.userService.update({
@@ -120,7 +121,7 @@ export class UserController {
     }
   
     @Delete(':id')
-    @ApiCreatedResponse({
+    @ApiOkResponse({
       description: 'Usuário deletado com sucesso',
       type: CreateUserDTO,
     })
