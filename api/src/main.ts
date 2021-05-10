@@ -27,7 +27,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(PORT);
-  console.log(`API Online. Access http://localhost:${PORT}`);
+  console.log(`API Online. Access http://localhost:${PORT}/api`);
 
   if (module.hot) {
     module.hot.accept();

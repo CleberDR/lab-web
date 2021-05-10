@@ -16,7 +16,7 @@ export class CreateUserDTO {
     @IsNotEmpty()
     @IsString()
     @Length(11, 11)
-    cpf
+    cpf: string
 
     @ApiProperty({
         type: String,
@@ -24,7 +24,7 @@ export class CreateUserDTO {
     })
     @IsNotEmpty()
     @IsString()
-    matricula
+    matricula: string
 
     @ApiProperty({
         type: Number,
@@ -32,7 +32,7 @@ export class CreateUserDTO {
     })
     @IsNotEmpty()
     @IsNumber()
-    tipo
+    tipo: number
 
     @ApiProperty({
         type: String,
@@ -49,42 +49,46 @@ export class CreateUserDTO {
     // @IsNotEmpty()
     // @IsString()
     // @IsEmail()
-    // email
+    // email: string
 }
 
 export class UpdateUserDTO {
     @ApiProperty({
         type: String,
-        example: '00000000000'
+        example: '00000000000',
+        required: false,
     })
     @IsOptional()
     @IsString()
     @Length(11, 11)
-    cpf
+    cpf: string
 
     @ApiProperty({
         type: String,
-        example: '000000000'
+        example: '000000000',
+        required: false,
     })
     @IsOptional()
     @IsString()
-    matricula
+    matricula: string
 
     @ApiProperty({
         type: Number,
-        example: 1
+        example: 1,
+        required: false,
     })
     @IsOptional()
     @IsNumber()
-    tipo
+    tipo: number
 
     @ApiProperty({
         type: String,
-        example: 'Uneb Uneb'
+        example: 'Uneb Uneb',
+        required: false,
     })
     @IsOptional()
     @IsString()
-    nome
+    nome: string
 
     // @ApiProperty({
     //     type: String,
@@ -93,5 +97,5 @@ export class UpdateUserDTO {
     // @IsNotEmpty()
     // @IsString()
     // @IsEmail()
-    // email
+    // email: string
 }
