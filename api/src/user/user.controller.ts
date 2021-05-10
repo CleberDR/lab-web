@@ -30,7 +30,11 @@ export class UserController {
     async create(
       @Body() userData: CreateUserDTO,
     ): Promise<CreateUserDTO> {
-      return await this.userService.create(userData);
+      try {
+        return await this.userService.create(userData);
+      } catch (e) {
+        return e.message
+      }
     }
 
     @Get(':id')
@@ -38,7 +42,11 @@ export class UserController {
       type: CreateUserDTO,
     })
     async findOne(@Param('id') id: string) {
-      return await this.userService.findOne({id: parseInt(id, 10)});
+      try {
+        return await this.userService.findOne({id: parseInt(id, 10)});
+      } catch (e) {
+        return e.message
+      }
     }
   
     @Get()
@@ -81,14 +89,18 @@ export class UserController {
       type: String,
     })
     async findAll(@Query() query: ListAllEntities) {
-      const queryParams = {
-        where: (query?.where && JSON.parse(query?.where)) || {},
-        skip: +query?.skip || undefined,
-        take: +query?.take || undefined,
-        cursor: query?.cursor && { id: +query?.cursor } || undefined,
-        orderBy: (query?.orderBy && JSON.parse(query?.orderBy)) || {},
-      }  
-      return await this.userService.findAll(queryParams);
+      try {
+        const queryParams = {
+          where: (query?.where && JSON.parse(query?.where)) || {},
+          skip: +query?.skip || undefined,
+          take: +query?.take || undefined,
+          cursor: query?.cursor && { id: +query?.cursor } || undefined,
+          orderBy: (query?.orderBy && JSON.parse(query?.orderBy)) || {},
+        }  
+        return await this.userService.findAll(queryParams);
+      } catch (e) {
+        return e.message
+      }
     }
   
     @Patch(':id')
@@ -97,11 +109,14 @@ export class UserController {
       type: CreateUserDTO,
     })
     async update(@Param('id') id: string, @Body() updateUserData: UpdateUserDTO) {
-      console.log(id);
-      return await this.userService.update({
-        where: {id: parseInt(id, 10)},
-        data: updateUserData
-      });
+      try {
+        return await this.userService.update({
+          where: {id: parseInt(id, 10)},
+          data: updateUserData
+        });
+      } catch (e) {
+        return e.message
+      }
     }
   
     @Delete(':id')
@@ -110,9 +125,13 @@ export class UserController {
       type: CreateUserDTO,
     })
     async remove(@Param('id') id: string) {
-      return await this.userService.delete(
-        {id: parseInt(id, 10)}
-      );
+      try {
+        return await this.userService.delete(
+          {id: parseInt(id, 10)}
+        );
+      } catch (e) {
+        return e.message
+      }
     }
   
     

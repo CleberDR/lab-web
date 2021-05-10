@@ -5,7 +5,7 @@ WORKDIR ./
 COPY . .
 
 COPY package*.json ./
-COPY src/prisma ./prisma/
+COPY prisma ./prisma/
 
 RUN npm install
 
@@ -13,4 +13,4 @@ RUN npm install
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "start:dev"]
