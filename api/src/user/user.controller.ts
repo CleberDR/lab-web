@@ -6,9 +6,7 @@ import {
   Patch, 
   Delete, 
   Param, 
-  Query, 
-  UsePipes, 
-  ParseIntPipe 
+  Query,
 } from '@nestjs/common';
 import { 
   CreateUserDTO, 
@@ -31,16 +29,17 @@ export class UserController {
 
     @Get(':id')
     async findOne(@Param('id') id: string) {
-      return await this.userService.findOne({id: +id});
+      return await this.userService.findOne({id: parseInt(id, 10)});
     }
   
     @Get()
     async findAll(@Query() query: ListAllEntities) {
+    
       const queryParams = {
         where: (query?.where && JSON.parse(query?.where)) || {},
-        skip: +query?.skip || undefined,
-        take: +query?.take || undefined,
-        cursor: +query?.cursor && { id: +query?.cursor } || undefined,
+        skip: query?.skip || undefined,
+        take: query?.take || undefined,
+        cursor: query?.cursor && { id: +query?.cursor } || undefined,
         orderBy: (query?.orderBy && JSON.parse(query?.orderBy)) || {},
       }  
       return await this.userService.findAll(queryParams);
@@ -50,7 +49,7 @@ export class UserController {
     async update(@Param('id') id: string, @Body() updateUserData: UpdateUserDTO) {
       console.log(id);
       return await this.userService.update({
-        where: {id: +id},
+        where: {id: parseInt(id, 10)},
         data: updateUserData
       });
     }
@@ -58,7 +57,7 @@ export class UserController {
     @Delete(':id')
     async remove(@Param('id') id: string) {
       return await this.userService.delete(
-        {id: +id}
+        {id: parseInt(id, 10)}
       );
     }
   
