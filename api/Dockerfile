@@ -5,8 +5,11 @@ WORKDIR ./
 COPY . .
 
 COPY package*.json ./
+COPY src/prisma ./prisma/
 
 RUN npm install
+
+##RUN npx prisma migrate dev --schema scr/prisma/schema.prisma
 
 EXPOSE 3000
 

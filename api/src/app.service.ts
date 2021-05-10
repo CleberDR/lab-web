@@ -1,8 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
+interface healthCheck {
+  status: string,
+  time: string
+}
+
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Lab Web!!!';
+  getHello(): healthCheck {
+    return {status: 'OK', time: new Date().toISOString()};
   }
 }
