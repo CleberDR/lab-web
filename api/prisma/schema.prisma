@@ -8,17 +8,17 @@ datasource db {
 }
 
 model User {
-  id             Int            @id @default(autoincrement())
-  name           String         @db.Text
-  cpf            String         @db.VarChar(11)
-  enrollment     String         @db.Text
+  id             Int             @id @default(autoincrement())
+  name           String          @db.Text
+  cpf            String          @db.VarChar(11)
+  enrollment     String          @db.Text
   type           Int
-  mail           String         @db.Text
-  signUserTerm   SignUserTerm[]
+  mail           String          @db.Text
+  signUserTerm   SignUserTerms[]
   auth           Auth?
-  student        Student[]
-  professor      Professor[]
-  ClassStudent   ClassStudent?  @relation(fields: [classStudentId], references: [id])
+  student        Student?
+  professor      Professor?
+  ClassStudent   ClassStudent?   @relation(fields: [classStudentId], references: [id])
   classStudentId Int?
 }
 
@@ -29,7 +29,7 @@ model Auth {
   user     User   @relation(fields: [userId], references: [id])
 }
 
-model SignUserTerm {
+model SignUserTerms {
   id             Int           @id @default(autoincrement())
   uuid           String?       @db.Text
   isAnonymous    Boolean?
@@ -40,6 +40,16 @@ model SignUserTerm {
   rating         Rating?       @relation(fields: [ratingId], references: [id])
   userResponse   UserResponse? @relation(fields: [userResponseId], references: [id])
   createdAt      DateTime?     @db.Timestamp(0)
+}
+
+model UserResponse {
+  id                  Int               @id @default(autoincrement())
+  signUserTerm        SignUserTerms?
+  Question            Question?
+  response            Int?
+  userClassResponse   UserClassResponse @relation(fields: [userClassResponseId], references: [id])
+  userClassResponseId Int
+  questionId          Int?
 }
 
 model Rating {
@@ -53,7 +63,7 @@ model Rating {
   status              Boolean?
   url                 String?
   questionGroupRating QuestionGroupRating[]
-  signUserTerm        SignUserTerm[]
+  signUserTerm        SignUserTerms[]
 }
 
 model Question {
@@ -82,16 +92,6 @@ model QuestionGroup {
   QuestionGroupRating QuestionGroupRating[]
   title               String?
   isDisciplineRelated Boolean?
-}
-
-model UserResponse {
-  id                  Int               @id @default(autoincrement())
-  signUserTerm        SignUserTerm?
-  Question            Question?
-  response            Int?
-  userClassResponse   UserClassResponse @relation(fields: [userClassResponseId], references: [id])
-  userClassResponseId Int
-  questionId          Int?
 }
 
 model Class {
@@ -124,6 +124,11 @@ model Discipline {
   classId  Int
 }
 
+model Subject {
+  id    Int     @id @default(autoincrement())
+  Class Class[]
+}
+
 model UserClassResponse {
   id             Int           @id @default(autoincrement())
   Class          Class?        @relation(fields: [classId], references: [id])
@@ -131,11 +136,6 @@ model UserClassResponse {
   UserResponse   UserResponse?
   userResponseId Int?
   response       Int?
-}
-
-model Subject {
-  id    Int     @id @default(autoincrement())
-  Class Class[]
 }
 
 model Semester {

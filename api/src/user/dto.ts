@@ -24,7 +24,7 @@ export class CreateUserDTO {
     })
     @IsNotEmpty()
     @IsString()
-    matricula: string
+    enrollment: string
 
     @ApiProperty({
         type: Number,
@@ -32,7 +32,7 @@ export class CreateUserDTO {
     })
     @IsNotEmpty()
     @IsNumber()
-    tipo: number
+    type: number
 
     @ApiProperty({
         type: String,
@@ -40,16 +40,16 @@ export class CreateUserDTO {
     })
     @IsNotEmpty()
     @IsString()
-    nome: string
+    name: string
 
-    // @ApiProperty({
-    //     type: String,
-    //     example: 'uneb@uneb.gov.ba'
-    // })
-    // @IsNotEmpty()
-    // @IsString()
-    // @IsEmail()
-    // email: string
+    @ApiProperty({
+        type: String,
+        example: 'uneb@uneb.gov.ba'
+    })
+    @IsNotEmpty()
+    @IsString()
+    @IsEmail()
+    mail: string
 }
 
 export class UpdateUserDTO {
@@ -70,7 +70,7 @@ export class UpdateUserDTO {
     })
     @IsOptional()
     @IsString()
-    matricula: string
+    enrollment: string
 
     @ApiProperty({
         type: Number,
@@ -79,7 +79,7 @@ export class UpdateUserDTO {
     })
     @IsOptional()
     @IsNumber()
-    tipo: number
+    type: number
 
     @ApiProperty({
         type: String,
@@ -88,14 +88,14 @@ export class UpdateUserDTO {
     })
     @IsOptional()
     @IsString()
-    nome: string
+    name: string
 
-    // @ApiProperty({
-    //     type: String,
-    //     example: 'uneb@uneb.gov.ba'
-    // })
-    // @IsNotEmpty()
-    // @IsString()
-    // @IsEmail()
-    // email: string
+    @ApiProperty({
+        type: String,
+        example: 'uneb@uneb.gov.ba'
+    })
+    @IsNotEmpty()
+    @IsString()
+    @IsEmail()
+    mail: string
 }
