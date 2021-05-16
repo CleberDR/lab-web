@@ -18,6 +18,7 @@ model User {
   auth           Auth?
   student        Student?
   professor      Professor?
+  password String
   ClassStudent   ClassStudent?   @relation(fields: [classStudentId], references: [id])
   classStudentId Int?
 }
