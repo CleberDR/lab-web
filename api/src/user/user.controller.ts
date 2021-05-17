@@ -108,7 +108,6 @@ export class UserController {
       description: 'Usuário editado com sucesso',
       type: CreateUserDTO,
     })
-    @ApiOkResponse()
     async update(@Param('id') id: string, @Body() updateUserData: UpdateUserDTO) {
       try {
         return await this.userService.update({
