@@ -3,6 +3,8 @@ import { Controller, Get, Request, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { LocalAuthGuard } from './auth/guards/local-auth.guard';
 import { AuthService } from './auth/auth.service';
+import { ApiQuery, ApiOkResponse } from '@nestjs/swagger';
+
 
 interface healthCheck {
   status: string,
@@ -17,6 +19,23 @@ export class AppController {
   ) {}
 
   @UseGuards(LocalAuthGuard)
+  @ApiOkResponse({
+    type: Object({auth_token: "token"}),
+  })
+  @ApiQuery({
+    description: 'Email do usuário',
+    name: 'username',
+    example: 'uneb@uneb.gov.ba',
+    required: true,
+    type: String,
+  })
+  @ApiQuery({
+    description: 'Senha do usuário',
+    name: 'password',
+    example: '020304050',
+    required: true,
+    type: String,
+  })
   @Post('auth/login')
   async login(@Request() req) {
     return this.authService.login(req.user);
