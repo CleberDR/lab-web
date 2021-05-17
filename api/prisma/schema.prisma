@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  name           String          @db.Text
+  cpf            String          @db.VarChar(11)
+  enrollment     String          @db.Text
+  type           Int
+  mail           String          @db.Text
+  signUserTerm   SignUserTerms[]
+  auth           Auth?
+  student        Student?
+  professor      Professor?
+  password String
+  ClassStudent   ClassStudent?   @relation(fields: [classStudentId], references: [id])
+  classStudentId Int?
+}
+
+model Auth {
+  id       Int    @id @default(autoincrement())
+  password String
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id])
+}
+
+model SignUserTerms {
+  id             Int           @id @default(autoincrement())
+  uuid           String?       @db.Text
+  isAnonymous    Boolean?
+  userId         Int?
+  ratingId       Int?
+  userResponseId Int?
+  user           User?         @relation(fields: [userId], references: [id])
+  rating         Rating?       @relation(fields: [ratingId], references: [id])
+  userResponse   UserResponse? @relation(fields: [userResponseId], references: [id])
+  createdAt      DateTime?     @db.Timestamp(0)
+}
+
+model UserResponse {
+  id                  Int               @id @default(autoincrement())
+  signUserTerm        SignUserTerms?
+  Question            Question?
+  response            Int?
+  userClassResponse   UserClassResponse @relation(fields: [userClassResponseId], references: [id])
+  userClassResponseId Int
+  questionId          Int?
+}
+
+model Rating {
+  id                  Int                   @id @default(autoincrement())
+  semester            Semester[]
+  title               String?
+  objective           String?
+  startDate           DateTime?             @db.Timestamp(0)
+  endDate             DateTime?             @db.Timestamp(0)
+  isAnonymous         Boolean?
+  status              Boolean?
+  url                 String?
+  questionGroupRating QuestionGroupRating[]
+  signUserTerm        SignUserTerms[]
+}
+
+model Question {
+  id                  Int                   @id @default(autoincrement())
+  QuestionGroupRating QuestionGroupRating[]
+  text                String?
+  isRequired          Boolean?
+  position            Int?
+  imageUrl            String?
+  userResponse        UserResponse          @relation(fields: [userResponseId], references: [id])
+  userResponseId      Int
+}
+
+model QuestionGroupRating {
+  id              Int           @id @default(autoincrement())
+  rating          Rating[]
+  questionGroup   QuestionGroup @relation(fields: [questionGroupId], references: [id])
+  position        Int?
+  question        Question      @relation(fields: [questionId], references: [id])
+  questionGroupId Int
+  questionId      Int
+}
+
+model QuestionGroup {
+  id                  Int                   @id @default(autoincrement())
+  QuestionGroupRating QuestionGroupRating[]
+  title               String?
+  isDisciplineRelated Boolean?
+}
+
+model Class {
+  id                Int                 @id @default(autoincrement())
+  classStudent      ClassStudent[]
+  subject           Subject             @relation(fields: [subjectId], references: [id])
+  semester          Semester            @relation(fields: [semesterId], references: [id])
+  title             String?             @db.Text
+  classProfessor    ClassProfessor[]
+  UserClassResponse UserClassResponse[]
+  subjectId         Int
+  semesterId        Int
+  Discipline        Discipline[]
+}
+
+model Course {
+  id         Int          @id @default(autoincrement())
+  code       String?      @db.Text
+  title      String?      @db.Text
+  discipline Discipline[]
+}
+
+model Discipline {
+  id       Int     @id @default(autoincrement())
+  course   Course  @relation(fields: [courseId], references: [id])
+  code     String?
+  title    String?
+  class    Class   @relation(fields: [classId], references: [id])
+  courseId Int
+  classId  Int
+}
+
+model Subject {
+  id    Int     @id @default(autoincrement())
+  Class Class[]
+}
+
+model UserClassResponse {
+  id             Int           @id @default(autoincrement())
+  Class          Class?        @relation(fields: [classId], references: [id])
+  classId        Int?
+  UserResponse   UserResponse?
+  userResponseId Int?
+  response       Int?
+}
+
+model Semester {
+  id        Int       @id @default(autoincrement())
+  name      String?   @db.Text
+  startDate DateTime? @db.Timestamp(0)
+  endDate   DateTime? @db.Timestamp(0)
+  Class     Class?
+  Rating    Rating?   @relation(fields: [ratingId], references: [id])
+  ratingId  Int?
+}
+
+model Student {
+  id           Int            @id @default(autoincrement())
+  user         User           @relation(fields: [userId], references: [id])
+  ClassStudent ClassStudent[]
+  userId       Int
+}
+
+model Professor {
+  id               Int            @id @default(autoincrement())
+  userId           Int
+  user             User           @relation(fields: [userId], references: [id])
+  classProfessor   ClassProfessor @relation(fields: [classProfessorId], references: [id])
+  classProfessorId Int
+}
+
+model ClassStudent {
+  id        Int     @id @default(autoincrement())
+  class     Class   @relation(fields: [classId], references: [id])
+  classId   Int
+  studentId Int
+  user      User[]
+  Student   Student @relation(fields: [studentId], references: [id])
+}
+
+model ClassProfessor {
+  id        Int         @id @default(autoincrement())
+  Class     Class?      @relation(fields: [classId], references: [id])
+  classId   Int?
+  Professor Professor[]
+}
