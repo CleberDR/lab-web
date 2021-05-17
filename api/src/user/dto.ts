@@ -50,6 +50,15 @@ export class CreateUserDTO {
     @IsString()
     @IsEmail()
     mail: string
+
+    @ApiProperty({
+        type: String,
+        example: '123456'
+    })
+    @IsNotEmpty()
+    @IsString()
+    @Length(6)
+    password: string
 }
 
 export class UpdateUserDTO {
@@ -94,8 +103,19 @@ export class UpdateUserDTO {
         type: String,
         example: 'uneb@uneb.gov.ba'
     })
+    @IsOptional()
     @IsNotEmpty()
     @IsString()
     @IsEmail()
     mail: string
+
+    @ApiProperty({
+        type: String,
+        example: '123456'
+    })
+    @IsOptional()
+    @IsNotEmpty()
+    @IsString()
+    @Length(6)
+    password: string
 }
