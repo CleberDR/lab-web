@@ -10,28 +10,28 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiQuery, ApiOkResponse } from '@nestjs/swagger';
 import { 
-  CreateUserDTO, 
-  UpdateUserDTO,  
+  CreateRatingDTO, 
+  UpdateRatingDTO,  
 } from './dto';
 import { ListAllEntities } from '../query.dto';
-import { UserService } from './user.service'
+import { RatingService } from './rating.service'
 
-@ApiTags('Users')
-@Controller('users')
-export class UserController {
+@ApiTags('Ratings')
+@Controller('ratings')
+export class RatingController {
   
-    constructor(private readonly userService: UserService) {}
+    constructor(private readonly ratingService: RatingService) {}
 
     @Post('/')
     @ApiCreatedResponse({
       description: 'Usuário cadastrado com sucesso',
-      type: CreateUserDTO,
+      type: CreateRatingDTO,
     })
     async create(
-      @Body() userData: CreateUserDTO,
-    ): Promise<CreateUserDTO> {
+      @Body() ratingData: CreateRatingDTO,
+    ): Promise<CreateRatingDTO> {
       try {
-        return await this.userService.create(userData);
+        return await this.ratingService.create(ratingData);
       } catch (e) {
         return e.message
       }
@@ -39,11 +39,11 @@ export class UserController {
 
     @Get(':id')
     @ApiOkResponse({
-      type: CreateUserDTO,
+      type: CreateRatingDTO,
     })
     async findOne(@Param('id') id: string) {
       try {
-        return await this.userService.findOne({id: parseInt(id, 10)});
+        return await this.ratingService.findOne({id: parseInt(id, 10)});
       } catch (e) {
         return e.message
       }
@@ -51,7 +51,7 @@ export class UserController {
   
     @Get()
     @ApiOkResponse({
-      type: [CreateUserDTO],
+      type: [CreateRatingDTO],
     })
     @ApiQuery({
       description: 'Filtra',
@@ -97,7 +97,7 @@ export class UserController {
           cursor: query?.cursor && { id: +query?.cursor } || undefined,
           orderBy: (query?.orderBy && JSON.parse(query?.orderBy)) || {},
         }  
-        return await this.userService.findAll(queryParams);
+        return await this.ratingService.findAll(queryParams);
       } catch (e) {
         return e.message
       }
@@ -106,13 +106,13 @@ export class UserController {
     @Patch(':id')
     @ApiOkResponse({
       description: 'Usuário editado com sucesso',
-      type: CreateUserDTO,
+      type: CreateRatingDTO,
     })
-    async update(@Param('id') id: string, @Body() updateUserData: UpdateUserDTO) {
+    async update(@Param('id') id: string, @Body() updateRatingData: UpdateRatingDTO) {
       try {
-        return await this.userService.update({
+        return await this.ratingService.update({
           where: {id: parseInt(id, 10)},
-          data: updateUserData
+          data: updateRatingData
         });
       } catch (e) {
         return e.message
@@ -122,11 +122,11 @@ export class UserController {
     @Delete(':id')
     @ApiOkResponse({
       description: 'Usuário deletado com sucesso',
-      type: CreateUserDTO,
+      type: CreateRatingDTO,
     })
     async delete(@Param('id') id: string) {
       try {
-        return await this.userService.delete(
+        return await this.ratingService.delete(
           {id: parseInt(id, 10)}
         );
       } catch (e) {

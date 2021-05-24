@@ -10,28 +10,28 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiCreatedResponse, ApiQuery, ApiOkResponse } from '@nestjs/swagger';
 import { 
-  CreateUserDTO, 
-  UpdateUserDTO,  
+  CreateClassDTO, 
+  UpdateClassDTO,  
 } from './dto';
 import { ListAllEntities } from '../query.dto';
-import { UserService } from './user.service'
+import { ClassService } from './class.service'
 
-@ApiTags('Users')
-@Controller('users')
-export class UserController {
+@ApiTags('Classes')
+@Controller('class')
+export class ClassController {
   
-    constructor(private readonly userService: UserService) {}
+    constructor(private readonly classService: ClassService) {}
 
     @Post('/')
     @ApiCreatedResponse({
-      description: 'Usuário cadastrado com sucesso',
-      type: CreateUserDTO,
+      description: 'Cadastrado com sucesso',
+      type: CreateClassDTO,
     })
     async create(
-      @Body() userData: CreateUserDTO,
-    ): Promise<CreateUserDTO> {
+      @Body() classData: CreateClassDTO,
+    ): Promise<CreateClassDTO> {
       try {
-        return await this.userService.create(userData);
+        return await this.classService.create(classData);
       } catch (e) {
         return e.message
       }
@@ -39,11 +39,11 @@ export class UserController {
 
     @Get(':id')
     @ApiOkResponse({
-      type: CreateUserDTO,
+      type: CreateClassDTO,
     })
     async findOne(@Param('id') id: string) {
       try {
-        return await this.userService.findOne({id: parseInt(id, 10)});
+        return await this.classService.findOne({id: parseInt(id, 10)});
       } catch (e) {
         return e.message
       }
@@ -51,7 +51,7 @@ export class UserController {
   
     @Get()
     @ApiOkResponse({
-      type: [CreateUserDTO],
+      type: [CreateClassDTO],
     })
     @ApiQuery({
       description: 'Filtra',
@@ -97,7 +97,7 @@ export class UserController {
           cursor: query?.cursor && { id: +query?.cursor } || undefined,
           orderBy: (query?.orderBy && JSON.parse(query?.orderBy)) || {},
         }  
-        return await this.userService.findAll(queryParams);
+        return await this.classService.findAll(queryParams);
       } catch (e) {
         return e.message
       }
@@ -105,14 +105,14 @@ export class UserController {
   
     @Patch(':id')
     @ApiOkResponse({
-      description: 'Usuário editado com sucesso',
-      type: CreateUserDTO,
+      description: 'Editado com sucesso',
+      type: CreateClassDTO,
     })
-    async update(@Param('id') id: string, @Body() updateUserData: UpdateUserDTO) {
+    async update(@Param('id') id: string, @Body() updateClassData: UpdateClassDTO) {
       try {
-        return await this.userService.update({
+        return await this.classService.update({
           where: {id: parseInt(id, 10)},
-          data: updateUserData
+          data: updateClassData
         });
       } catch (e) {
         return e.message
@@ -121,12 +121,12 @@ export class UserController {
   
     @Delete(':id')
     @ApiOkResponse({
-      description: 'Usuário deletado com sucesso',
-      type: CreateUserDTO,
+      description: 'Deletado com sucesso',
+      type: CreateClassDTO,
     })
     async delete(@Param('id') id: string) {
       try {
-        return await this.userService.delete(
+        return await this.classService.delete(
           {id: parseInt(id, 10)}
         );
       } catch (e) {
